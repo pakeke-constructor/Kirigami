@@ -1,4 +1,5 @@
 
+
 local kirigami = require("kirigami")
 
 
@@ -42,5 +43,6 @@ function love.draw()
         drawRect(chopped, {1,0,0})
     end
 end
+
 
 

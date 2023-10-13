@@ -25,7 +25,7 @@ local left, middle, right = region:splitHorizontal(0.1, 0.8, 0.1)
 
 
 
-local right_regions[] = right:grid(rows, cols)
+local right_regions = right:grid(rows, cols)
 for _, r in ipairs(right_regions) do
     -- iterate over grid squares
 end
@@ -36,18 +36,6 @@ local inner_region = region:pad(10)
 
 local inner_region = region:padRatio(0.1)
 -- creates an inner region with 10% padding around edges
-
--- STRETCH GOAL:
-local custom_region = region:pad(0.1, 0, 0.1 0)
--- same as above, but padding only on top and bottom.
--- (top, left, bottom, right) 
-
-
-
-local bigger_region = region:expand(0.5)
--- creates an expanded region, by 50% in all directions
-local tall_region = region:expand(0, 0, 2, 0)
--- expands 200% in bottom direction
 
 
 local r2 = region:offset(ox, oy)
@@ -71,6 +59,11 @@ local centered = region:center(otherRegion)
 -- centers `region` with respect to otherRegion
 
 
+local chopped = region:chop(otherRegion)
+
+
+
+local cx,cy = region:getCenter() -- gets center of region
 
 local x,y,w,h = region:get()
 

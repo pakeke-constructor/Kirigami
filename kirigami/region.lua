@@ -163,21 +163,13 @@ function Region:shrinkTo(unitW, unitH)
 end
 
 
-
-function Region:getCenter()
-    -- returns (x,y) position of center of region
-    return (self.x + self.w/2), (self.y + self.h/2)
-end
-
-
-
 function Region:centerX(other)
     --[[
         centers a region horizontally w.r.t other
     ]]
     local targX, _ = self:getCenter()
     local currX, _ = other:getCenter()
-    local dx = targX - currX
+    local dx = currX - targX
     
     return newRegion(self.x+dx, self.y, self.w, self.h)
 end
@@ -189,9 +181,9 @@ function Region:centerY(other)
     ]]
     local _, targY = self:getCenter()
     local _, currY = other:getCenter()
-    local dy = targY - currY
+    local dy = currY - targY
     
-    return newRegion(self.x+dy, self.y, self.w, self.h)
+    return newRegion(self.x, self.y+dy, self.w, self.h)
 end
 
 
@@ -236,6 +228,32 @@ function Region:chop(other)
 end
 
 
+function Region:offset(ox, oy)
+    ox = ox or 0
+    oy = oy or 0
+    if ox ~= 0 or oy ~= 0 then
+        return newRegion(self.x+ox, self.y+oy, self.w, self.h)
+    end
+    return self
+end
+
+
+
+
+
+
+function Region:exists()
+    -- returns true if a region exists
+    -- (ie its height and width are > 0)
+    return self.w > 0 and self.h > 0 
+end
+
+
+
+function Region:getCenter()
+    -- returns (x,y) position of center of region
+    return (self.x + self.w/2), (self.y + self.h/2)
+end
 
 
 function Region:get()
