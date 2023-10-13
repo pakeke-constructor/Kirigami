@@ -31,7 +31,10 @@ local function getRatios(...)
     local ratios = {}
     local sum = 0
     local len = select("#", ...)
-    if len <= 0 then error("No numbers passed in!") end
+    if len <= 0 then
+        error("No numbers passed in!")
+    end
+
 	for i=1, len do
         -- collect ratios
 		local v = select(i, ...)
@@ -59,7 +62,7 @@ function Region:splitVertical(...)
     ]]
     local regions = getRatios(...)
     local accumY = self.y
-    for i=1, #regions - 1 do
+    for i=1, #regions do
         local ratio = regions[i]
         local y, h = accumY, self.h*ratio
         regions[i] = newRegion(self.x, y, self.w, h)
@@ -77,7 +80,7 @@ function Region:splitHorizontal(...)
     -- 0.1  0.8  0.1
     -- |.|........|.|
     local accumX = self.x
-    for i=1, #regions - 1 do
+    for i=1, #regions do
         local ratio = regions[i]
         local x, w = accumX, self.w*ratio
         regions[i] = newRegion(x, self.y, w, self.h)
@@ -169,6 +172,9 @@ end
 
 
 function Region:centerX(other)
+    --[[
+        centers a region horizontally w.r.t other
+    ]]
     local targX, _ = self:getCenter()
     local currX, _ = other:getCenter()
     local dx = targX - currX
@@ -177,7 +183,10 @@ function Region:centerX(other)
 end
 
 
-function Region:centerX(other)
+function Region:centerY(other)
+    --[[
+        centers a region vertically w.r.t other
+    ]]
     local _, targY = self:getCenter()
     local _, currY = other:getCenter()
     local dy = targY - currY
@@ -190,6 +199,40 @@ function Region:center(other)
     return self
         :centerX(other)
         :centerY(other)
+end
+
+
+local function isDifferent(self, x,y,w,h)
+    -- check for efficiency reasons
+    return self.x ~= x
+        or self.y ~= y
+        or self.w ~= w
+        or self.h ~= h
+end
+
+
+local function getEnd(self)
+    return self.x+self.w, self.y+self.h
+end
+
+
+function Region:chop(other)
+    --[[
+        chops a region such that it lies entirely inside `other`
+    ]]
+    local x,y,endX,endY
+    x = math.max(other.x, self.x)
+    y = math.max(other.y, self.y)
+    endX, endY = getEnd(self)
+    local endX2, endY2 = getEnd(other)
+    endX = math.min(endX, endX2)
+    endY = math.min(endY, endY2)
+    local w, h = math.max(0,endX-x), math.max(endY-y,0)
+
+    if isDifferent(self, x,y,w,h) then
+        return newRegion(x,y,w,h)
+    end
+    return self
 end
 
 
