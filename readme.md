@@ -20,6 +20,18 @@ It works great with [Inky!](https://github.com/Keyslam/Inky)
 
 ----------------
 
+----------------
+
+# Learning:
+
+Honestly, the best way to learn is just from doing.<br/>
+Clone this repo and have a play around with the example in `main.lua`.
+
+# API Reference:
+See `API.md` for a basic API reference.<br/>
+Or just look through the source code :)
+
+
 # Simple example with code:
 
 ![basic](media/simple.png)
@@ -45,14 +57,4 @@ end
 ```
 
 ----------------
-
-
-
-
-# API Reference:
-See `API.md` for a basic API reference.<br/>
-Or just look through the source code :)
-
-----------------
-
 
