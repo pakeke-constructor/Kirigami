@@ -2,7 +2,8 @@
 # Kirigami
 
 Kirigami is a rectangle-layout library for lua,
-but mainly for use with [love2d.](https://love2d.org)
+but mainly for use with [love2d.](https://love2d.org)<br/>
+It is named after [Japanese kirigami.](https://en.wikipedia.org/wiki/Kirigami)
 
 It works great with [Inky!](https://github.com/Keyslam/Inky)
 
@@ -12,21 +13,9 @@ It works great with [Inky!](https://github.com/Keyslam/Inky)
 
 ----------------
 
-![looping](gifs/looping.gif)
-
-----------------
-
-# API Reference:
-See `API.md` for a basic API reference.<br/>
-Or just look through the source code :)
-
-----------------
-
-# Example:
-
+Code for the above example:
 ```lua
 local kirigami = require("kirigami")
-
 
 love.window.setMode(600, 400, {
     resizable = true
@@ -67,3 +56,15 @@ function love.draw()
 end
 
 ```
+
+------------------
+
+![looping](gifs/looping.gif)
+
+----------------
+
+# API Reference:
+See `API.md` for a basic API reference.<br/>
+Or just look through the source code :)
+
+----------------
