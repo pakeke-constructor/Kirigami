@@ -2,45 +2,43 @@
 local kirigami = require("kirigami")
 
 
-love.window.setMode(500, 500, {
+love.window.setMode(600, 400, {
     resizable = true
 })
 
 
-local WHITE = {1,1,1}
-
-local function drawRect(region, color)
-    love.graphics.setColor(color or WHITE)
+local function drawRect(region)
     love.graphics.rectangle("line", region:get())
 end
 
-local sin, cos = math.sin, math.cos
-local pi = math.pi
-
 
 function love.draw()
-    local W,H = love.graphics.getDimensions()
-    local AMP = W/8 -- amplitude of sin/cos
-    local screen = kirigami.Region(0,0, W,H)
+    local screen = kirigami.Region(0,0, love.graphics.getDimensions())
 
-    local tick = love.timer.getTime()
+    local region = screen:pad(12)
+    drawRect(region)
 
-    local regionA = kirigami.Region(0,0,W/3,H/3)
-        :center(screen)
-        :offset(AMP * sin(tick), AMP * cos(tick))
-    drawRect(regionA)
+    local left, right = region:splitHorizontal(0.4, 0.6)
+    drawRect(left)
+    drawRect(right)
 
-    local regionB = kirigami.Region(0,0,W/3,H/3)
-        :center(screen)
-        :offset(AMP * sin(tick+pi), AMP * cos(tick+pi))
-    drawRect(regionB)
+    local top, middle, bot = left:splitVertical(0.3, 0.4, 0.1)
+    drawRect(top)
+    drawRect(middle)
+    drawRect(bot)
 
-    local chopped = regionA
-        :chop(regionB)
-        :pad(10)
-    if chopped:exists() then
-        drawRect(chopped, {1,0,0})
+    local padded = right:pad(20)
+    drawRect(padded)
+
+    local padtop, padbot = padded:splitVertical(0.2, 0.8)
+    drawRect(padbot)
+    local cols, rows = 3, 2
+
+    local grids = padtop:pad(8):grid(cols, rows)
+    for _, r in ipairs(grids) do
+        drawRect(r:pad(3))
     end
 end
+
 
 
