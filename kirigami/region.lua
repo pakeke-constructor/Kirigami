@@ -9,8 +9,8 @@ local function newRegion(x,y,w,h)
     return setmetatable({
         x = x,
         y = y,
-        w = w,
-        h = h
+        w = math.max(w, 0),
+        h = math.max(h, 0)
     }, Region_mt)
 end
 
@@ -28,19 +28,17 @@ end
 
 local function getRatios(...)
     -- gets ratios from a vararg-list of numbers
-    local ratios = {}
+    local ratios = {...}
+    local len = #ratios
     local sum = 0
-    local len = select("#", ...)
     if len <= 0 then
         error("No numbers passed in!")
     end
 
-	for i=1, len do
+	for _, v in ipairs(ratios) do
         -- collect ratios
-		local v = select(i, ...)
         assert(type(v) == "number", "Arguments need to be numbers")
         sum = sum + v
-        table.insert(ratios, v)
 	end
 
     for i=1, len do
@@ -208,7 +206,7 @@ local function getEnd(self)
 end
 
 
-function Region:chop(other)
+function Region:intersect(other)
     --[[
         chops a region such that it lies entirely inside `other`
     ]]

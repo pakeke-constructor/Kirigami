@@ -37,12 +37,12 @@ function love.draw()
         :offset(AMP * sin(tick+pi), AMP * cos(tick+pi))
     drawRect(regionB)
 
-    local chopped = regionA
-        :chop(regionB)
+    local intersected = regionA
+        :intersect(regionB)
         :pad(10)
-    if chopped:exists() then
-        drawRect(chopped, {1,0,0, 0.5}, true)
-        drawRect(chopped, {1,0,0})
+    if intersected:exists() then
+        drawRect(intersected, {1,0,0, 0.5}, true)
+        drawRect(intersected, {1,0,0})
     end
 end
 

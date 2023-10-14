@@ -59,7 +59,7 @@ local centered = region:center(otherRegion)
 -- centers `region` with respect to otherRegion
 
 
-local chopped = region:chop(otherRegion)
+local intersect = region:intersect(otherRegion)
 
 
 
