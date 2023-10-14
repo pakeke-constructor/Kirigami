@@ -5,6 +5,8 @@ Kirigami is a rectangle-layout library for lua,
 but mainly for use with [love2d.](https://love2d.org)<br/>
 It is named after [Japanese kirigami.](https://en.wikipedia.org/wiki/Kirigami)
 
+Kirigami was inspired by [NLay](https://github.com/MikuAuahDark/NPad93#nlay) by [MikuAuahDark](https://github.com/MikuAuahDark/).
+
 It works great with [Inky!](https://github.com/Keyslam/Inky)
 
 ----------------
@@ -68,3 +70,5 @@ See `API.md` for a basic API reference.<br/>
 Or just look through the source code :)
 
 ----------------
+
+

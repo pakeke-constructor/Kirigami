@@ -1,4 +1,5 @@
 
+
 local kirigami = require("kirigami")
 
 
@@ -34,7 +35,7 @@ function love.draw()
     drawRect(padbot)
     local cols, rows = 3, 2
 
-    local grids = padtop:pad(8):grid(cols, rows)
+    local grids = padtop:padRatio(0.05):grid(cols, rows)
     for _, r in ipairs(grids) do
         drawRect(r:pad(3))
     end

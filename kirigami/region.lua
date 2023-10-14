@@ -5,7 +5,31 @@ local Region_mt = {__index = Region}
 
 
 
+local function getXYWH(x,y,w,h)
+    if type(x) == "number" then
+        return x,y,w,h
+    else
+        assert(type(x) == "table", "Expected x,y,w,h numbers")
+        local region = x
+        return region:get()
+    end
+end
+
+
+local function getWH(w,h)
+    if type(w) == "number" then
+        return w,h
+    else
+        assert(type(w) == "table", "Expected w,h numbers")
+        local region = w
+        return region:get()
+    end
+end
+
+
+
 local function newRegion(x,y,w,h)
+    x,y,w,h = getXYWH(x,y,w,h)
     return setmetatable({
         x = x,
         y = y,
@@ -21,9 +45,7 @@ local unpack = unpack or table.unpack
 
 
 
-local function average(a, b)
-    return (a+b)/2
-end
+
 
 
 local function getRatios(...)
@@ -109,39 +131,63 @@ end
 
 
 
--- FUTURE GOAL: Allow for custom regions.
--- local custom_region = region:pad(0.1, 0, 0.1 0)
--- same as above, but padding only on top and bottom.
--- (top, left, bottom, right) 
+local function pad(self, top, left, bot, right)
+    local dw = left + right
+    local dh = top + bot
 
-function Region:padRatio(ratio)
-    --[[
-        creates an inner region with percentage of padding,
-        according to the width/height.
-        If width-height is different, we
-        pad by the AVERAGE of the width-height values
-    ]]
-    local v = ratio * average(self.w, self.h)
-    return self:pad(v)
-end
-
-
-function Region:pad(v)
-    --[[
-        creates an inner region with `v` units of padding
-    ]]
-    local v2 = v*2
     return newRegion(
-        self.x + v,
-        self.y + v,
-        self.w - v2,
-        self.h - v2
+        self.x + left,
+        self.y + top,
+        self.w - dw,
+        self.h - dh
     )
 end
 
 
 
+function Region:pad(left, top, right, bot)
+    --[[
+        Creates an inner region, with padding on sides.
+
+        :pad(v) -- pads all sides by v.
+        :pad(a,b) -- pads  by `a`, and y-sides by `b`.
+        :pad(top,left,bot,right) -- pads all sides independently
+    ]]
+    assert(type(top) == "number", "need a number for padding")
+    top = top or left -- If top not specified, defaults to left.
+    bot = bot or top -- defaults to top
+    right = right or left -- defaults to left
+    return pad(self, top, left, bot, right)
+end
+
+
+
+local function maxHalf(x)
+    return math.min(0.5, x)
+end
+
+
+function Region:padRatio(left, top, right, bot)
+    --[[
+        Same as Region:pad, but pads by % instead.
+        For example, 0.2 padding will pad by 20%.
+    ]]
+    assert(type(left) == "number", "need a number for padding")
+    left = maxHalf(left)
+    top = maxHalf(top or left)
+    bot = maxHalf(bot or top)
+    right = maxHalf(right or left)
+
+    local w,h = self.w, self.h
+    left, right = left*w, right*w
+    top, bot = top*h, bot*h
+
+    return pad(self, top, left, bot, right)
+end
+
+
 function Region:growTo(unitW, unitH)
+    unitW, unitH = getWH(unitW, unitH)
     local w = math.max(unitW, self.w)
     local h = math.max(unitH, self.h)
     if w ~= self.w or h ~= self.h then
@@ -152,6 +198,7 @@ end
 
 
 function Region:shrinkTo(unitW, unitH)
+    unitW, unitH = getWH(unitW, unitH)
     local w = math.min(unitW, self.w)
     local h = math.min(unitH, self.h)
     if w ~= self.w or h ~= self.h then
@@ -159,6 +206,10 @@ function Region:shrinkTo(unitW, unitH)
     end
     return self
 end
+
+
+
+
 
 
 function Region:centerX(other)
