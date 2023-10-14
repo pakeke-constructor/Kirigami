@@ -20,7 +20,7 @@ It works great with [Inky!](https://github.com/Keyslam/Inky)
 
 ----------------
 
-## Simple example with code:
+# Simple example with code:
 
 ![basic](media/simple.png)
 
