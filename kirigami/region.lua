@@ -6,6 +6,8 @@ local Region_mt = {__index = Region}
 
 
 local function getXYWH(x,y,w,h)
+    -- allows for passing in a region as first argument.
+    -- if a region is passed in, takes x,y,w,h from the region.
     if type(x) == "number" then
         return x,y,w,h
     else
@@ -16,13 +18,20 @@ local function getXYWH(x,y,w,h)
 end
 
 
+local function max0(v)
+    return math.max(v,0)
+end
+
 local function getWH(w,h)
+    -- allows for passing in a region as first argument.
+    -- if a region is passed in, takes w,h from the region.
     if type(w) == "number" then
-        return w,h
+        return max0(w), max0(h)
     else
         assert(type(w) == "table", "Expected w,h numbers")
         local region = w
-        return region:get()
+        local _,_, ww,hh = region:get()
+        return ww,hh
     end
 end
 
@@ -186,10 +195,13 @@ function Region:padRatio(left, top, right, bot)
 end
 
 
-function Region:growTo(unitW, unitH)
-    unitW, unitH = getWH(unitW, unitH)
-    local w = math.max(unitW, self.w)
-    local h = math.max(unitH, self.h)
+function Region:growTo(width, height)
+    --[[
+        grows a region to width/height
+    ]]
+    width, height = getWH(width, height)
+    local w = math.max(width, self.w)
+    local h = math.max(height, self.h)
     if w ~= self.w or h ~= self.h then
         return newRegion(self.x,self.y, w,h)
     end
@@ -197,16 +209,37 @@ function Region:growTo(unitW, unitH)
 end
 
 
-function Region:shrinkTo(unitW, unitH)
-    unitW, unitH = getWH(unitW, unitH)
-    local w = math.min(unitW, self.w)
-    local h = math.min(unitH, self.h)
+function Region:shrinkTo(width, height)
+    --[[
+        shrinks a region to width/height
+    ]]
+    width, height = getWH(width, height)
+    local w = math.min(width, self.w)
+    local h = math.min(height, self.h)
     if w ~= self.w or h ~= self.h then
         return newRegion(self.x,self.y, w,h)
     end
     return self
 end
 
+
+
+function Region:scaleToFit(width, height)
+    --[[
+        scales a region to fit width/height,
+        such that the aspect-ratio of the region is kept intact.
+    ]]
+    width, height = getWH(width, height)
+    local w, h = self.w, self.h
+    local scaleX = width / w
+    local scaleY = height / h
+
+    -- we scale by the smallest value.
+    -- this ensures that the result fits within the bounds
+    local scale = math.min(scaleX, scaleY)
+
+    return newRegion(self.x, self.y, w*scale, h*scale)
+end
 
 
 
@@ -285,6 +318,7 @@ function Region:offset(ox, oy)
     end
     return self
 end
+
 
 
 
