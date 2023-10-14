@@ -162,7 +162,7 @@ function Region:pad(left, top, right, bot)
         :pad(a,b) -- pads  by `a`, and y-sides by `b`.
         :pad(top,left,bot,right) -- pads all sides independently
     ]]
-    assert(type(top) == "number", "need a number for padding")
+    assert(type(left) == "number", "need a number for padding")
     top = top or left -- If top not specified, defaults to left.
     bot = bot or top -- defaults to top
     right = right or left -- defaults to left
@@ -228,6 +228,8 @@ function Region:scaleToFit(width, height)
     --[[
         scales a region to fit width/height,
         such that the aspect-ratio of the region is kept intact.
+
+        This method also returns the scale, for use with images or text.
     ]]
     width, height = getWH(width, height)
     local w, h = self.w, self.h
@@ -238,7 +240,7 @@ function Region:scaleToFit(width, height)
     -- this ensures that the result fits within the bounds
     local scale = math.min(scaleX, scaleY)
 
-    return newRegion(self.x, self.y, w*scale, h*scale)
+    return newRegion(self.x, self.y, w*scale, h*scale), scale
 end
 
 
@@ -292,7 +294,7 @@ end
 
 function Region:intersect(other)
     --[[
-        chops a region such that it lies entirely inside `other`
+        Intersects 2 regions
     ]]
     local x,y,endX,endY
     x = math.max(other.x, self.x)

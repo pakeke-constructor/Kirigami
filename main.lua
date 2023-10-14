@@ -1,5 +1,4 @@
 
-
 local kirigami = require("kirigami")
 
 
@@ -10,74 +9,46 @@ love.window.setMode(600, 400, {
 
 local WHITE = {1,1,1,1}
 
-local function drawRect(region, color, fill)
-    love.graphics.setLineWidth(4)
-    love.graphics.setColor(color or WHITE)
+
+local function drawTextIn(region, text)
+    --[[
+        dont worry about this function, it just draws 
+        text inside the region.
+    ]]
+    local cx, cy = region:getCenter()
+    local font = love.graphics.getFont()
+    local fw, fh = font:getWidth(text), font:getHeight()
+    local textRegion = kirigami.Region(0,0,fw,fh)
+    local _, scale = textRegion:scaleToFit(region:padRatio(0.2))
+    -- useful idiom when we want to scale image/text ^^^^
+    love.graphics.print(text,cx,cy,0,scale,scale,fw/2,fh/2)
+end
+
+
+local function drawRegion(region)
+    love.graphics.setLineWidth(6)
+    love.graphics.setColor(WHITE)
     love.graphics.rectangle(fill and "fill" or "line", region:get())
 end
 
 
-local function drawTextIn(region, text)
-    local cx, cy = region:getCenter()
-    local font = love.graphics.getFont()
-    local fw, fh = font:getWidth(text), font:getHeight()
-    love.graphics.print(text,cx,cy,0,2,2,fw/2,fh/2)
+local function namedRegion(name, region)
+    drawTextIn(region, name)
+    drawRegion(region)
 end
-
-
-local function drawImageIn(region, image)
-    love.graphics.setColor(1,1,1)
-    local w,h = image:getDimensions()
-    local x,y, rw, rh = region:get()
-    local sx, sy = rw/w, rh/h
-    love.graphics.draw(image,x,y,0,sx,sy)
-end
-
-
-local RATIO = 2.5
-
-local image = love.graphics.newImage("examples/scale/triangle.png")
-
-local count = 1
-
 
 
 function love.draw()
     local screen = kirigami.Region(0,0, love.graphics.getDimensions())
+    drawRegion(screen)
 
-    local header, main = screen:splitVertical(0.15, 0.85)
-    drawTextIn(header, "Press key for new region, click to delete region")
+    local header, main = screen:splitVertical(0.2, 0.8)
+    namedRegion("header", header)
 
-    local box, render = main, main
+    local left, right = main:splitHorizontal(0.4, 0.6)
+    namedRegion("left", left)
 
-    for i=1, count do
-        local odd = (i % 2) ~= 0
-        if odd then
-            render, box = box:splitHorizontal(1, RATIO)
-        else
-            box, render = box:splitVertical(RATIO, 1)
-        end
-
-        drawRect(render, {0,0,0.7})
-    end
-    
-    local imgRegion = kirigami.Region(0,0, image:getDimensions())
-        :scaleToFit(box)
-        :center(box)
-        :padRatio(0.05)
-
-    drawImageIn(imgRegion, image)
-    drawRect(imgRegion, {0,1,0})
+    local padded_right = right:pad(20) -- pad by 20 pixels
+    namedRegion("padded_right", padded_right)
 end
-
-
-function love.keypressed(_, scancode)
-    count = count + 1
-end
-
-
-function love.mousepressed()
-    count = math.max(0, count - 1)
-end
-
 
