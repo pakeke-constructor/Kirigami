@@ -59,7 +59,9 @@ local centered = region:center(otherRegion)
 -- centers `region` with respect to otherRegion
 
 
-local intersect = region:intersect(otherRegion)
+local intersect = region:intersection(otherRegion)
+
+local union = region:union(otherRegion)
 
 
 

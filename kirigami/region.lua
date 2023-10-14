@@ -292,9 +292,12 @@ local function getEnd(self)
 end
 
 
-function Region:intersect(other)
+function Region:intersection(other)
     --[[
-        Intersects 2 regions
+        Intersects 2 regions.
+        opposite of `union`
+    
+        :intersection is useful for putting a MAXIMUM on region size
     ]]
     local x,y,endX,endY
     x = math.max(other.x, self.x)
@@ -312,6 +315,31 @@ function Region:intersect(other)
 end
 
 
+function Region:union(other)
+    --[[
+        Takes the union between 2 regions
+        opposite of `intersection`
+
+        :union is useful for putting a MINIMUM on region size.
+    ]]
+    local x,y,endX,endY
+    x = math.min(other.x, self.x)
+    y = math.min(other.y, self.y)
+    endX, endY = getEnd(self)
+    local endX2, endY2 = getEnd(other)
+    endX = math.max(endX, endX2)
+    endY = math.max(endY, endY2)
+    local w, h = math.max(0,endX-x), math.max(endY-y,0)
+
+    if isDifferent(self, x,y,w,h) then
+        return newRegion(x,y,w,h)
+    end
+    return self
+end
+
+
+
+
 function Region:offset(ox, oy)
     ox = ox or 0
     oy = oy or 0
@@ -320,7 +348,6 @@ function Region:offset(ox, oy)
     end
     return self
 end
-
 
 
 
