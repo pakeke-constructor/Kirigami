@@ -35,7 +35,6 @@ function love.draw()
         - region's height is 40% of the outer height
         - region is padded 20 units
     ]]
-
     local _,_,_,outerHeight = right:get()
     local complex = right
         :pad(20)
@@ -47,7 +46,4 @@ function love.draw()
     love.graphics.setColor(1,0,0)
     drawRegion(complex)
 end
-
-
-
 
