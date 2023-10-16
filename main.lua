@@ -1,4 +1,5 @@
 
+
 local kirigami = require("kirigami")
 
 
@@ -6,44 +7,51 @@ love.window.setMode(600, 400, {
     resizable = true
 })
 
+
+local WHITE = {1,1,1,1}
+
+
+local function drawTextIn(region, text)
+    --[[
+        dont worry about this function, it just draws 
+        text inside the region.
+    ]]
+    local cx, cy = region:getCenter()
+    local font = love.graphics.getFont()
+    local fw, fh = font:getWidth(text), font:getHeight()
+    local textRegion = kirigami.Region(0,0,fw,fh)
+    local scale = textRegion:getScaleToFit(region:padRatio(0.2))
+    -- useful idiom when we want to scale image/text ^^^^
+    love.graphics.print(text,cx,cy,0,scale,scale,fw/2,fh/2)
+end
+
+
 local function drawRegion(region)
-    love.graphics.setLineWidth(4)
-    love.graphics.rectangle("line", region:get())
+    love.graphics.setLineWidth(6)
+    love.graphics.setColor(WHITE)
+    love.graphics.rectangle(fill and "fill" or "line", region:get())
+end
+
+
+local function namedRegion(name, region)
+    drawTextIn(region, name)
+    drawRegion(region)
 end
 
 
 function love.draw()
-    love.graphics.setColor(1,1,1)
+    local screen = kirigami.Region(0,0, love.graphics.getDimensions())
+    drawRegion(screen)
 
-    local region = kirigami.Region(0,0, love.graphics.getDimensions())
-        :pad(24)
-    drawRegion(region)
+    local header, main = screen:splitVertical(0.2, 0.8)
+    namedRegion("header", header)
 
-    local left, right = region
-        :splitHorizontal(0.6,0.4)
+    local left, right = main:splitHorizontal(0.4, 0.6)
+    namedRegion("left", left)
 
-    drawRegion(left)
-
-    --[[
-        Example of a region with more complex properties.
-
-        This region should have the following properties:
-            (in order of precedence)
-
-        - region can never be bigger than outer region
-        - region can never be smaller than 40 units
-        - region's height is 40% of the outer height
-        - region is padded 20 units
-    ]]
-    local _,_,_,outerHeight = right:get()
-    local complex = right
-        :pad(20)
-        :shrinkTo(math.huge, outerHeight * 0.4)
-        :center(right)
-        :union(kirigami.Region(0,0,40,40):center(right))
-        :intersection(right)
-        
-    love.graphics.setColor(1,0,0)
-    drawRegion(complex)
+    local padded_right = right:pad(20) -- pad by 20 pixels
+    namedRegion("padded_right", padded_right)
 end
+
+
 

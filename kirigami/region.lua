@@ -38,6 +38,10 @@ end
 
 
 local function newRegion(x,y,w,h)
+    if not x then
+        -- default region is empty
+        x,y,w,h = 0,0,0,0
+    end
     x,y,w,h = getXYWH(x,y,w,h)
     return setmetatable({
         x = x,
@@ -224,12 +228,9 @@ end
 
 
 
-function Region:scaleToFit(width, height)
+function Region:getScaleToFit(width, height)
     --[[
-        scales a region to fit width/height,
-        such that the aspect-ratio of the region is kept intact.
-
-        This method also returns the scale, for use with images or text.
+        gets the scale such that a region fits (width, height) bounds.
     ]]
     width, height = getWH(width, height)
     local w, h = self.w, self.h
@@ -239,8 +240,15 @@ function Region:scaleToFit(width, height)
     -- we scale by the smallest value.
     -- this ensures that the result fits within the bounds
     local scale = math.min(scaleX, scaleY)
+    return scale
+end
 
-    return newRegion(self.x, self.y, w*scale, h*scale), scale
+
+
+function Region:scaleToFit(width, height)
+    local scale = self:getScaleToFit(width, height)
+    local w, h = self.w, self.h
+    return newRegion(self.x, self.y, w*scale, h*scale)
 end
 
 

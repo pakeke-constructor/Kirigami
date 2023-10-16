@@ -20,7 +20,7 @@ local function drawTextIn(region, text)
     local font = love.graphics.getFont()
     local fw, fh = font:getWidth(text), font:getHeight()
     local textRegion = kirigami.Region(0,0,fw,fh)
-    local _, scale = textRegion:scaleToFit(region:padRatio(0.2))
+    local scale = textRegion:getScaleToFit(region:padRatio(0.2))
     -- useful idiom when we want to scale image/text ^^^^
     love.graphics.print(text,cx,cy,0,scale,scale,fw/2,fh/2)
 end
