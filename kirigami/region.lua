@@ -274,6 +274,11 @@ function Region:scaleToFit(width, height)
     return newRegion(self.x, self.y, w*scale, h*scale)
 end
 
+function Region:scale(sx, sy)
+    sx = sx or 1
+    sy = sy or 1
+    return newRegion(self.x, self.y, self.w*sx, self.h*sy)
+end
 
 
 function Region:set(x,y,w,h)
@@ -436,3 +441,4 @@ end
 
 
 return newRegion
+
