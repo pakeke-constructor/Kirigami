@@ -8,50 +8,46 @@ love.window.setMode(600, 400, {
 })
 
 
-local WHITE = {1,1,1,1}
-
-
 local function drawTextIn(region, text)
-    --[[
-        dont worry about this function, it just draws 
-        text inside the region.
-    ]]
     local cx, cy = region:getCenter()
     local font = love.graphics.getFont()
     local fw, fh = font:getWidth(text), font:getHeight()
-    local textRegion = kirigami.Region(0,0,fw,fh)
-    local scale = textRegion:getScaleToFit(region:padRatio(0.2))
-    -- useful idiom when we want to scale image/text ^^^^
+    local _, scale = region:scaleToFit(fw,fh)
     love.graphics.print(text,cx,cy,0,scale,scale,fw/2,fh/2)
 end
 
-
-local function drawRegion(region)
-    love.graphics.setLineWidth(6)
-    love.graphics.setColor(WHITE)
-    love.graphics.rectangle(fill and "fill" or "line", region:get())
-end
-
-
-local function namedRegion(name, region)
-    drawTextIn(region, name)
-    drawRegion(region)
+local function drawRect(name, region)
+    love.graphics.rectangle("line", region:get())
+    love.graphics.print()
 end
 
 
 function love.draw()
     local screen = kirigami.Region(0,0, love.graphics.getDimensions())
-    drawRegion(screen)
 
-    local header, main = screen:splitVertical(0.2, 0.8)
-    namedRegion("header", header)
+    local region = screen:pad(12)
+    drawRect(region)
 
-    local left, right = main:splitHorizontal(0.4, 0.6)
-    namedRegion("left", left)
+    local left, right = region:splitHorizontal(0.4, 0.6)
+    drawRect(left)
+    drawRect(right)
 
-    local padded_right = right:pad(20) -- pad by 20 pixels
-    namedRegion("padded_right", padded_right)
+    local top, middle, bot = left:splitVertical(0.3, 0.4, 0.1)
+    drawRect(top)
+    drawRect(middle)
+    drawRect(bot)
+
+    local padded = right:pad(20)
+    drawRect(padded)
+
+    local padtop, padbot = padded:splitVertical(0.2, 0.8)
+    drawRect(padbot)
+    local cols, rows = 3, 2
+
+    local grids = padtop:pad(8):grid(cols, rows)
+    for _, r in ipairs(grids) do
+        drawRect(r:pad(3))
+    end
 end
-
 
 

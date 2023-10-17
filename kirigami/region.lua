@@ -276,6 +276,16 @@ end
 
 
 
+function Region:set(x,y,w,h)
+    return newRegion(
+        x or self.x,
+        y or self.y,
+        w or self.w,
+        h or self.h
+    )
+end
+
+
 
 
 function Region:centerX(other)
@@ -367,6 +377,27 @@ function Region:union(other)
     end
     return self
 end
+
+
+function Region:clampInside(other)
+    --[[
+        moves a region position such that it resides
+        inside of `other`.
+        Does not change the w,h values.
+    ]]
+    local x,y,endX,endY
+    x, y = self.x, self.y
+    endX, endY = getEnd(self)
+    local endX2, endY2 = getEnd(other)
+    x = math.min(x, endX2 - self.w)
+    y = math.min(y, endY2 - self.h)
+    x = math.max(other.x, x)
+    y = math.max(other.y, y)
+    return newRegion(x,y,self.w,self.h)
+end
+
+
+
 
 
 
