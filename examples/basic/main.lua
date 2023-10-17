@@ -8,17 +8,8 @@ love.window.setMode(600, 400, {
 })
 
 
-local function drawTextIn(region, text)
-    local cx, cy = region:getCenter()
-    local font = love.graphics.getFont()
-    local fw, fh = font:getWidth(text), font:getHeight()
-    local _, scale = region:scaleToFit(fw,fh)
-    love.graphics.print(text,cx,cy,0,scale,scale,fw/2,fh/2)
-end
-
-local function drawRect(name, region)
+local function drawRect(region)
     love.graphics.rectangle("line", region:get())
-    love.graphics.print()
 end
 
 
@@ -49,5 +40,7 @@ function love.draw()
         drawRect(r:pad(3))
     end
 end
+
+
 
 

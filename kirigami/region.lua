@@ -403,10 +403,6 @@ end
 
 
 
-
-
-
-
 function Region:offset(ox, oy)
     ox = ox or 0
     oy = oy or 0
@@ -415,9 +411,6 @@ function Region:offset(ox, oy)
     end
     return self
 end
-
-
-
 
 
 
