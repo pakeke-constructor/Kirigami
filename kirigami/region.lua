@@ -165,6 +165,14 @@ function Region:grid(rows, cols)
 end
 
 
+function Region:rows(rows)
+  return self:grid(rows, 1)
+end
+
+
+function Region:columns(columns)
+  return self:grid(1, columns)
+end
 
 
 local function pad(self, top, left, bot, right)
@@ -181,7 +189,7 @@ end
 
 
 
-function Region:pad(left, top, right, bot)
+function Region:padPixels(left, top, right, bot)
     --[[
         Creates an inner region, with padding on sides.
 
@@ -203,7 +211,7 @@ local function maxHalf(x)
 end
 
 
-function Region:padRatio(left, top, right, bot)
+function Region:pad(left, top, right, bot)
     --[[
         Same as Region:pad, but pads by % instead.
         For example, 0.2 padding will pad by 20%.
