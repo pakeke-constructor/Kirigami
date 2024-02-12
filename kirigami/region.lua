@@ -213,8 +213,8 @@ end
 
 function Region:pad(left, top, right, bot)
     --[[
-        Same as Region:pad, but pads by % instead.
-        For example, 0.2 padding will pad by 20%.
+        Pads a region, percentage wise.
+        For example, :pad(0.1) will give 10% padding to ALL sides.
     ]]
     assert(type(left) == "number", "need a number for padding")
     left = maxHalf(left)

@@ -66,7 +66,7 @@ function love.draw()
     local imgRegion = kirigami.Region(0,0, image:getDimensions())
         :scaleToFit(box)
         :center(box)
-        :padRatio(0.05)
+        :pad(0.05)
 
     drawImageIn(imgRegion, image)
     drawRect(imgRegion, {0,1,0})

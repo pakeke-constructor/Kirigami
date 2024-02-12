@@ -16,7 +16,7 @@ function love.draw()
     love.graphics.setColor(1,1,1)
 
     local region = kirigami.Region(0,0, love.graphics.getDimensions())
-        :pad(24)
+        :pad(0.1)
     drawRegion(region)
 
     local left, right = region
@@ -37,7 +37,7 @@ function love.draw()
     ]]
     local _,_,_,outerHeight = right:get()
     local complex = right
-        :pad(20)
+        :pad(0.1)
         :shrinkTo(math.huge, outerHeight * 0.4)
         :center(right)
         :union(kirigami.Region(0,0,40,40):center(right))

@@ -39,7 +39,7 @@ function love.draw()
 
     local intersected = regionA
         :intersection(regionB)
-        :pad(10)
+        :padPixels(10)
     if intersected:exists() then
         drawRect(intersected, {1,0,0, 0.5}, true)
         drawRect(intersected, {1,0,0})

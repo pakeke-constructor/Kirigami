@@ -20,7 +20,7 @@ local function drawTextIn(region, text)
     local font = love.graphics.getFont()
     local fw, fh = font:getWidth(text), font:getHeight()
     local textRegion = kirigami.Region(0,0,fw,fh)
-    local scale = textRegion:getScaleToFit(region:padRatio(0.2))
+    local scale = textRegion:getScaleToFit(region:pad(0.2))
     -- useful idiom when we want to scale image/text ^^^^
     love.graphics.print(text,cx,cy,0,scale,scale,fw/2,fh/2)
 end
@@ -49,7 +49,7 @@ function love.draw()
     local left, right = main:splitHorizontal(0.4, 0.6)
     namedRegion("left", left)
 
-    local padded_right = right:pad(20) -- pad by 20 pixels
+    local padded_right = right:padPixels(20)
     namedRegion("padded_right", padded_right)
 end
 

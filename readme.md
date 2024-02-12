@@ -48,7 +48,7 @@ function love.draw()
     local left, right = main:splitHorizontal(0.4, 0.6)
     namedRegion("left", left)
 
-    local padded_right = right:pad(20) -- pad by 20 pixels
+    local padded_right = right:padPixels(20)
     namedRegion("padded_right", padded_right)
 end
 
